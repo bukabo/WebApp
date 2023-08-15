@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
     <title>FlaskBlog</title>
 </head>
@@ -10,11 +12,34 @@
         <h1>Моя страница</h1>
         <img src="https://img.icons8.com/?size=512&id=2sabHqhLJW1x&format=png">
         <p>Тут может быть замечательный текст</p>
-        <button id="By">Купить</button>
+        <button id="buy">Купить</button>
     </div>
-    <script src="https://telegram.org/js/telegram-web-app.js">
+    <form id="form">
+        <input type="text" placeholder="Имя" id="user_name">
+        <button id="order"> Оформить</button>
+    <div id="error"></div>
+    </form>
+    <script>
         let tg = window.Telegram.WebApp;
-        tg.expand()
+        let buy = document.getElementById("buy");
+        let order = document.getElementById("order");
+        tg.expand();
+
+        buy.addEventListener("click", () => {
+            document.getElementById("main").style.display = "none";
+            document.getElementById("form").style.display = "block";
+            document.getElementById("user_name").value  = tg.initDataUnsafe.user.first_name
+        })
+
+        order.addEventListener("click", () => {
+            {#document.getElementById("error").innerText = '';#}
+            let name = document.getElementById("user_name").value;
+            let data = {
+                name: name,
+            }
+            tg.sendData(JSON.stringify(data))
+            tg.close();
+        })
     </script>
 </body>
 </html>
